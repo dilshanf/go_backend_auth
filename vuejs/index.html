@@ -1,0 +1,100 @@
+<!doctype html>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Vue.js Login</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
+<link rel="stylesheet" href="./styles.css">
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+  <div id="login">
+    <div id="description">
+      <h1>Login</h1>
+      <p>Vue.JS framework</p>
+    </div>
+    <div id="form">
+      <form @submit.prevent="doLogin">
+        <label for="email">Email</label>
+        <input type="text" id="email" v-model="email" autocomplete="off">
+
+        <label for="password">Password</label>&nbsp;
+        <i class="fas" :class="[passwordIcon]" @click="hidePassword = !hidePassword"></i>
+        <input :type="passwordType" id="password" v-model="password">
+
+        <button type="submit">Log in</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const vm = new Vue({
+    el: '#app',
+    data: {
+      email: 'admin@admin.com',
+      password: 'password1',
+      hidePassword: true
+    },
+    computed: {
+      passwordType() {
+        return this.hidePassword ? 'password' : 'text'
+      },
+      passwordIcon() {
+        return this.hidePassword ? 'fa-eye' : 'fa-eye-slash'
+      }
+    },
+    methods: {
+      doLogin() {
+       const requestOptions = {
+			method: "POST",
+			credentials: 'include',
+			headers: { "Content-Type": "text/plain" },
+			body: JSON.stringify( {"username":this.email,"password":this.password} )
+		};
+		  fetch("http://localhost:8000/signin", requestOptions)
+			.then(data => {
+					if (data.status == 200)
+					{
+					console.log(data);
+						alert('success');
+						 const requestOptions1 = {
+						 credentials: 'include',
+						method: "POST",
+						headers: { "Content-Type": "text/plain" }
+					};
+									 fetch("http://localhost:8000/welcome", requestOptions1)
+						.then(data => {
+								if (data.status == 200)
+								{
+									alert('success');
+									
+									
+									
+								}
+								else
+								{
+									alert('failed login')
+								}
+							}
+					
+						
+						);
+						
+					}
+					else
+					{
+						alert('failed login')
+					}
+				}
+		
+			
+			);
+		}
+    }
+  })
+</script>
